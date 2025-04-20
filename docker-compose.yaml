@@ -1,0 +1,7 @@
+services:
+  lista-compra:
+    build: .
+    ports:
+      - '9000:9000'
+    volumes:
+      - .:/home/node/app
