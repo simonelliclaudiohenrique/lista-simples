@@ -1,11 +1,17 @@
+# MacOS
 .DS_Store
+
+# Thumbnails
 .thumbs.db
+
+# Node modules
 node_modules/
-dist/
 
 # Quasar core related directories
-.quasar
-/quasar.config.*.temporary.compiled*
+.quasar/
+
+# Build output directories
+/dist/
 
 # Cordova related directories and files
 /src-cordova/node_modules
