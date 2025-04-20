@@ -20,7 +20,7 @@
     <div class="q-pa-md q-gutter-md">
       <q-card v-if="listStore.lists.length === 0" rounded class="text-primary">
         <q-card-section>
-          <div class="row items-center justify-center text-subtitle1 text-bold">
+          <div class="row items-center justify-center text-subtitle1 text-bold text-center">
             Comece a adicionar listas e planejar suas compras
           </div>
         </q-card-section>

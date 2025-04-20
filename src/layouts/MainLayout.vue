@@ -1,7 +1,7 @@
 <template>
   <q-layout id="layout" view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar class="bg-white text-primary">
+    <q-header>
+      <q-toolbar class="bg-grey-2 text-primary">
         <q-toolbar-title> {{ titlePage }} </q-toolbar-title>
         <q-btn v-if="$route.meta.backButton" flat round dense icon="arrow_back" to="/" />
       </q-toolbar>
@@ -49,8 +49,10 @@
       </div>
     </ModalComponent>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container class="row justify-center bg-grey-2">
+      <div style="width: 600px">
+        <router-view />
+      </div>
     </q-page-container>
 
     <q-footer class="bg-transparent row justify-end items-center q-pa-md">

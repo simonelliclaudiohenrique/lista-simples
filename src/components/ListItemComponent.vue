@@ -35,7 +35,9 @@
         class="text-primary"
       >
         <q-card-section>
-          <div class="row items-center justify-center text-subtitle1 text-bold">
+          <div
+            class="row items-center justify-center text-subtitle1 text-bold text-bold text-center"
+          >
             Comece a adicionar itens a sua lista
           </div>
         </q-card-section>
