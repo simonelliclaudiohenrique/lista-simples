@@ -18,74 +18,17 @@
     </ModalComponent>
 
     <div class="q-pa-md q-gutter-md">
-      <q-card v-if="listStore.lists.length === 0" rounded class="text-primary">
-        <q-card-section>
-          <div class="row items-center justify-center text-subtitle1 text-bold text-center">
-            Comece a adicionar listas e planejar suas compras
-          </div>
-        </q-card-section>
-      </q-card>
+      <CardInfoComponent v-if="listStore.lists.length === 0" rounded class="text-primary">
+        Comece a adicionar items a sua lista
+      </CardInfoComponent>
 
-      <q-card
-        v-for="list in listStore.lists"
-        :key="list?.key"
-        class="my-card cursor-pointer"
-        @click="toItemsList(list.key)"
-      >
-        <q-card-section>
-          <div class="row">
-            <div class="col-8">
-              <div class="text-subtitle1">{{ list?.data?.description }}</div>
-            </div>
-            <div class="col-4 row items-center justify-end q-gutter-xs">
-              <div class="text-caption">
-                {{
-                  listItemStore?.itemsList
-                    .filter((item) => item?.data?.listKey === list.key)
-                    .filter((item) => item?.data?.done).length || 0
-                }}/{{
-                  listItemStore.itemsList.filter((item) => item.data?.listKey === list.key)
-                    .length || 0
-                }}
-              </div>
-              <div>
-                <q-btn
-                  size="sm"
-                  color="primary"
-                  flat
-                  round
-                  dense
-                  icon="edit"
-                  @click.stop="openModal(list)"
-                />
-                <q-btn
-                  size="sm"
-                  color="negative"
-                  flat
-                  round
-                  dense
-                  icon="delete"
-                  @click.stop="deleteList(list.key)"
-                />
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <q-linear-progress
-            animation-speed="0"
-            size="10px"
-            :value="
-              (listItemStore?.itemsList
-                .filter((item) => item?.data?.listKey === list.key)
-                .filter((item) => item?.data?.done).length || 0) /
-                (listItemStore.itemsList.filter((item) => item.data?.listKey === list.key).length ||
-                  0) || 0
-            "
-          />
-        </q-card-section>
-      </q-card>
+      <CardListComponent
+        :lists="listStore.lists"
+        :list-items="listItemStore.itemsList"
+        @delete-list="deleteList($event)"
+        @open-modal="openModal($event)"
+        @to-items-list="toItemsList($event)"
+      />
     </div>
   </div>
 </template>
@@ -98,6 +41,8 @@ import { inject, onMounted, ref } from 'vue';
 import type { List } from './models';
 import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useRoute, useRouter } from 'vue-router';
+import CardInfoComponent from './CardInfoComponent.vue';
+import CardListComponent from './CardListComponent.vue';
 
 const $q = useQuasar();
 const listStore = useListaStore();

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRefs, defineEmits, defineProps } from 'vue';
+import { computed, toRefs } from 'vue';
 
 const props = defineProps<{
   modelValue: number | null;

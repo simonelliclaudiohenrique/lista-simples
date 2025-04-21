@@ -28,135 +28,33 @@
         <CurrencyInput filled v-model="formItem.price" label="Preço" @keyup.enter="updateItem" />
       </div>
     </ModalComponent>
+
     <div class="q-pa-md q-gutter-md">
-      <q-card
+      <CardInfoComponent
         v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
-        rounded
-        class="text-primary"
       >
-        <q-card-section>
-          <div
-            class="row items-center justify-center text-subtitle1 text-bold text-bold text-center"
-          >
-            Comece a adicionar itens a sua lista
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card v-for="item in listItemStore?.itemsList" :key="item?.key" class="my-card">
-        <q-card-section>
-          <div class="row">
-            <div class="col-6">
-              <q-checkbox
-                v-model="item.data.done"
-                :label="item.data.content"
-                @update:model-value="checkItem(item?.key, item?.data?.done)"
-              />
-            </div>
-            <div class="col-6 row items-center justify-end">
-              <div class="col-2">{{ item.data?.quantity }}</div>
-              <div class="col-2">
-                {{
-                  (+item.data.price || 0).toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })
-                }}
-              </div>
-              <div class="col-8 row items-center justify-end">
-                <q-btn
-                  size="sm"
-                  color="primary"
-                  flat
-                  round
-                  dense
-                  icon="edit"
-                  @click.stop="openModal(item)"
-                />
-                <q-btn
-                  size="sm"
-                  color="negative"
-                  flat
-                  round
-                  dense
-                  icon="delete"
-                  @click.stop="deleteItem(item.key)"
-                />
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card
-        bordered
-        style="position: sticky; bottom: 0"
+        Comece a adicionar items a sua lista
+      </CardInfoComponent>
+
+      <CardItemsComponent
+        :list-items="listItemStore?.itemsList"
+        @delete-item="deleteItem($event.key)"
+        @check-item="checkItem($event.key, $event.data.done)"
+        @open-modal="openModal($event)"
+      />
+
+      <CardTotalComponent
         v-if="listItemStore.itemsList.length > 0 || listItemStore.itemsListDone.length > 0"
-        rounded
-        class="q-pa-md text-primary"
-      >
-        <div class="text-subtitle1 row items-center q-gutter-md">
-          <div class="text-bold">
-            Itens: <span class="text-bold">{{ listItemStore.itemsListDone.length }}</span>
-          </div>
-          <div class="text-bold">
-            Total:
-            <span class="text-bold">{{
-              listItemStore.itemsListDone
-                .filter((item) => item.data.done)
-                .reduce((acc, item) => acc + item.data.price * item.data.quantity, 0)
-                .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-            }}</span>
-          </div>
-        </div>
-      </q-card>
-      <q-card
-        v-for="item in listItemStore?.itemsListDone"
-        :key="item?.key"
-        class="my-card bg-light-blue-1"
-      >
-        <q-card-section>
-          <div class="row">
-            <div class="col-6">
-              <q-checkbox
-                color="primary"
-                v-model="item.data.done"
-                :label="item.data.content"
-                @update:model-value="checkItem(item?.key, item?.data?.done)"
-              />
-            </div>
-            <div class="col-6 row items-center justify-end">
-              <div class="col-2">{{ item.data?.quantity }}</div>
-              <div class="col-2">
-                {{
-                  (+item.data.price || 0).toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })
-                }}
-              </div>
-              <div class="col-8 row items-center justify-end">
-                <q-btn
-                  size="sm"
-                  color="primary"
-                  flat
-                  round
-                  dense
-                  icon="edit"
-                  @click.stop="openModal(item)"
-                />
-                <q-btn
-                  size="sm"
-                  color="negative"
-                  flat
-                  round
-                  dense
-                  icon="delete"
-                  @click.stop="deleteItem(item.key)"
-                />
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
+        :quantity="quantityItems()"
+        :total="calculateTotal()"
+      />
+
+      <CardItemsComponent
+        :list-items="listItemStore.itemsListDone"
+        @open-modal="openModal($event)"
+        @delete-item="deleteItem($event.key)"
+        @check-item="checkItem($event.key, $event.data.done)"
+      />
     </div>
   </div>
 </template>
@@ -170,6 +68,9 @@ import { inject, onMounted, reactive, ref } from 'vue';
 import type { ListItem } from './models';
 import { useRoute } from 'vue-router';
 import { useListaStore } from 'src/stores/listaStore';
+import CardItemsComponent from './CardItemsComponent.vue';
+import CardTotalComponent from './CardTotalComponent.vue';
+import CardInfoComponent from './CardInfoComponent.vue';
 
 const $q = useQuasar();
 const route = useRoute();
@@ -188,6 +89,21 @@ const formItem = reactive({
   quantity: 0,
   done: false,
 });
+
+const calculateTotal = () => {
+  const result = listItemStore.itemsListDone
+    .filter((item) => item.data.done)
+    .reduce((acc, item) => acc + +item.data.price * +item.data.quantity, 0)
+    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return result;
+};
+
+const quantityItems = () => {
+  const result = listItemStore.itemsListDone
+    .filter((item) => item.data.done)
+    .reduce((acc, item) => acc + +item.data.quantity, 0);
+  return result;
+};
 
 const openModal = (item: ListItem) => {
   itemKey.value = item.key;
