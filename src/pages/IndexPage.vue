@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-center items-center">
-    <q-img src="/src/assets/fundo_vazio.png">
+    <q-img src="~/assets/fundo_vazio.png">
       <div class="absolute-bottom text-primary bg-transparent">
         <div class="text-h6 text-center">Comece a criar suas listas e planejar suas compras</div>
         <div class="text-subtitle1 text-center text-secondary">

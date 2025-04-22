@@ -32,7 +32,7 @@
     <div class="q-pa-md q-gutter-md">
       <q-img
         v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
-        src="/src/assets/fundo_vazio.png"
+        src="~/assets/fundo_vazio.png"
       >
         <div class="absolute-bottom text-primary bg-transparent"></div>
       </q-img>
