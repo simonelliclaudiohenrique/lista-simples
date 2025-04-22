@@ -30,23 +30,19 @@
     </ModalComponent>
 
     <div class="q-pa-md q-gutter-md">
-      <q-img
-        v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
-        src="~/assets/fundo_vazio.png"
-      >
-        <div class="absolute-bottom text-primary bg-transparent"></div>
-      </q-img>
-      <div class="text-h6 text-center text-primary">
-        Adicione os items que deseja comprar a sua lista
-      </div>
-      <div class="text-subtitle1 text-center text-secondary">
-        Use o botão para adicionar um novo item
-      </div>
-      <!-- <CardInfoComponent
+      <div
         v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
       >
-        Comece a adicionar items a sua lista
-      </CardInfoComponent> -->
+        <q-img src="~/assets/fundo_vazio.png">
+          <div class="absolute-bottom text-primary bg-transparent"></div>
+        </q-img>
+        <div class="text-h6 text-center text-primary">
+          Adicione os items que deseja comprar a sua lista
+        </div>
+        <div class="text-subtitle1 text-center text-secondary">
+          Use o botão para adicionar um novo item
+        </div>
+      </div>
 
       <CardItemsComponent
         :list-items="listItemStore?.itemsList"
