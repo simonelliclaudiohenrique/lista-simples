@@ -2,10 +2,22 @@
   <q-layout id="layout" view="lHh Lpr lFf">
     <q-header>
       <q-toolbar class="bg-grey-2 text-primary">
+        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
         <q-toolbar-title> {{ titlePage }} </q-toolbar-title>
-        <q-btn v-if="$route.meta.backButton" flat round dense icon="arrow_back" to="/" />
+        <div class="q-gutter-md">
+          <q-btn v-if="$route.meta.backButton" flat round dense icon="arrow_back" to="/lists" />
+          <q-btn
+            v-if="!$q.screen.xs && !$q.screen.sm"
+            color="primary"
+            :label="$route.name === 'ListItems' ? 'Adicionar item' : 'Criar Nova Lista'"
+            @click="showModal = true"
+          />
+        </div>
       </q-toolbar>
+      <q-separator />
     </q-header>
+
+    <DrawerComponent v-model="drawer" :menu-list="menuList" />
 
     <ModalComponent v-model="showModal">
       <template #title> {{ $route?.params?.id ? 'Adicionar item' : 'Adicionar lista' }} </template>
@@ -56,7 +68,14 @@
     </q-page-container>
 
     <q-footer class="bg-transparent row justify-end items-center q-pa-md">
-      <q-btn size="lg" round color="primary" icon="add" @click="showModal = true" />
+      <q-btn
+        v-if="$q.screen.xs || $q.screen.sm"
+        size="lg"
+        round
+        color="primary"
+        icon="add"
+        @click="showModal = true"
+      />
     </q-footer>
   </q-layout>
 </template>
@@ -65,21 +84,35 @@
 import ModalComponent from 'src/components/ModalComponent.vue';
 import CurrencyInput from 'src/components/CurrencyInput.vue';
 import { useQuasar } from 'quasar';
-import type { ListItem } from 'src/components/models';
+import type { ListItem, MenuList } from 'src/components/models';
 import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useListaStore } from 'src/stores/listaStore';
-import { provide, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, provide, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import DrawerComponent from 'src/components/DrawerComponent.vue';
 
 const $q = useQuasar();
 const route = useRoute();
+const router = useRouter();
 const listStore = useListaStore();
 const itemsList = useListaItemStore();
 const showModal = ref(false);
 const listDescription = ref('');
 const titlePage = ref();
+const drawer = ref(false);
 
-provide('titlePage', titlePage);
+const menuList: MenuList[] = [
+  {
+    icon: 'draw',
+    label: 'Lista Simples App',
+    separator: true,
+  },
+  {
+    icon: 'edit_note',
+    label: 'Lista de compras',
+    separator: true,
+  },
+];
 
 const formItem = reactive<ListItem>({
   key: '',
@@ -92,6 +125,16 @@ const formItem = reactive<ListItem>({
   },
 });
 
+onMounted(async () => {
+  $q.loading.show();
+  await listStore.carregarListas();
+  if (listStore.lists.length > 0) {
+    await router.push({ name: 'Lists' });
+  }
+  titlePage.value = route.meta.title;
+  $q.loading.hide();
+});
+
 const createList = async () => {
   if (!listDescription.value) {
     return;
@@ -101,6 +144,7 @@ const createList = async () => {
 
   listDescription.value = '';
   showModal.value = false;
+  if (route.name !== 'Lists') await router.push({ name: 'Lists' });
 };
 
 const criarItem = async () => {
@@ -121,4 +165,6 @@ const criarItem = async () => {
   formItem.data.price = 0;
   await itemsList.get(formItem.data.listKey);
 };
+
+provide('titlePage', titlePage);
 </script>

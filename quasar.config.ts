@@ -87,7 +87,7 @@ export default defineConfig((/* ctx */) => {
     framework: {
       config: {
         brand: {
-          primary: '#42A5F5',
+          primary: '#7D6DEC',
           secondary: '#26A69A',
           accent: '#9C27B0',
 

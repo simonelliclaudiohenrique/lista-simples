@@ -18,10 +18,6 @@
     </ModalComponent>
 
     <div class="q-pa-md q-gutter-md">
-      <CardInfoComponent v-if="listStore.lists.length === 0" rounded class="text-primary">
-        Comece a adicionar items a sua lista
-      </CardInfoComponent>
-
       <CardListComponent
         :lists="listStore.lists"
         :list-items="listItemStore.itemsList"
@@ -41,7 +37,6 @@ import { inject, onMounted, ref } from 'vue';
 import type { List } from './models';
 import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useRoute, useRouter } from 'vue-router';
-import CardInfoComponent from './CardInfoComponent.vue';
 import CardListComponent from './CardListComponent.vue';
 
 const $q = useQuasar();
@@ -62,6 +57,7 @@ onMounted(async () => {
   await listItemStore.getAll();
   titlePage.value = route.meta.title;
   $q.loading.hide();
+  if (!listStore.lists.length) await router.push({ name: 'Home' });
 });
 
 const toItemsList = async (key: string) => {
@@ -87,5 +83,6 @@ const deleteList = async (key: string) => {
   await listStore.removeList(key);
   await listStore.carregarListas();
   $q.loading.hide();
+  if (!listStore.lists.length) await router.push({ name: 'Home' });
 };
 </script>

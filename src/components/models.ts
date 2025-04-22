@@ -24,3 +24,10 @@ export interface ListItemData {
   price?: number;
   done?: boolean;
 }
+
+export interface MenuList {
+  icon: string;
+  iconColor?: string;
+  label: string;
+  separator: boolean;
+}

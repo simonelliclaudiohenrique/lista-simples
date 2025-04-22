@@ -30,11 +30,23 @@
     </ModalComponent>
 
     <div class="q-pa-md q-gutter-md">
-      <CardInfoComponent
+      <q-img
+        v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
+        src="/src/assets/fundo_vazio.png"
+      >
+        <div class="absolute-bottom text-primary bg-transparent"></div>
+      </q-img>
+      <div class="text-h6 text-center text-primary">
+        Adicione os items que deseja comprar a sua lista
+      </div>
+      <div class="text-subtitle1 text-center text-secondary">
+        Use o botão para adicionar um novo item
+      </div>
+      <!-- <CardInfoComponent
         v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
       >
         Comece a adicionar items a sua lista
-      </CardInfoComponent>
+      </CardInfoComponent> -->
 
       <CardItemsComponent
         :list-items="listItemStore?.itemsList"
@@ -70,7 +82,7 @@ import { useRoute } from 'vue-router';
 import { useListaStore } from 'src/stores/listaStore';
 import CardItemsComponent from './CardItemsComponent.vue';
 import CardTotalComponent from './CardTotalComponent.vue';
-import CardInfoComponent from './CardInfoComponent.vue';
+// import CardInfoComponent from './CardInfoComponent.vue';
 
 const $q = useQuasar();
 const route = useRoute();
