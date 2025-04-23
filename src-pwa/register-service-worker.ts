@@ -33,18 +33,22 @@ register(process.env.SERVICE_WORKER_FILE, {
     Notify.create({
       message: 'Nova versão disponível!',
       color: 'primary',
-      icon: 'cloud_downloa',
+      icon: 'cloud_download',
       timeout: 10000,
       actions: [
         {
           label: 'Atualizar',
-          color: 'positive',
-          textColor: 'dark',
+          color: 'white', // cor do texto do botão
           handler: () => {
             window.location.reload();
           },
         },
+        {
+          label: 'Fechar',
+          color: 'white',
+        },
       ],
+      textColor: 'white', // cor do texto principal da notificação
     });
   },
 
