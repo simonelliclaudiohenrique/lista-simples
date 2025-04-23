@@ -33,6 +33,8 @@ register(process.env.SERVICE_WORKER_FILE, {
     Notify.create({
       message: 'Nova versão disponível!',
       color: 'primary',
+      icon: 'cloud_downloa',
+      closeBtn: 'Atualizar',
       timeout: 10000,
       onDismiss() {
         window.location.reload();
