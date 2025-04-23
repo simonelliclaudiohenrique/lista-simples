@@ -19,7 +19,7 @@
 
     <div class="q-pa-md q-gutter-md">
       <CardListComponent
-        :lists="listStore.lists"
+        :lists="listStore?.lists || []"
         :list-items="listItemStore.itemsList"
         @delete-list="deleteList($event)"
         @open-modal="openModal($event)"
@@ -57,7 +57,7 @@ onMounted(async () => {
   await listItemStore.getAll();
   titlePage.value = route.meta.title;
   $q.loading.hide();
-  if (!listStore.lists.length) await router.push({ name: 'Home' });
+  if (!listStore?.lists?.length) await router.push({ name: 'Home' });
 });
 
 const toItemsList = async (key: string) => {
@@ -66,7 +66,7 @@ const toItemsList = async (key: string) => {
 
 const openModal = (list: List) => {
   listKey.value = list.key;
-  listDescription.value = list.data.description;
+  listDescription.value = list?.data?.description;
   showModal.value = true;
 };
 const alterList = async () => {
@@ -83,6 +83,6 @@ const deleteList = async (key: string) => {
   await listStore.removeList(key);
   await listStore.carregarListas();
   $q.loading.hide();
-  if (!listStore.lists.length) await router.push({ name: 'Home' });
+  if (!listStore?.lists?.length) await router.push({ name: 'Home' });
 };
 </script>

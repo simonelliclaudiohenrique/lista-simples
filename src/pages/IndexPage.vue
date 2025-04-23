@@ -13,5 +13,12 @@
 </template>
 
 <script setup lang="ts">
-// import CardInfoComponent from 'src/components/CardInfoComponent.vue';
+import { inject, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
+const titlePage = ref(inject('titlePage'));
+onMounted(() => {
+  titlePage.value = route.meta.title;
+});
 </script>

@@ -31,7 +31,7 @@
 
     <div class="q-pa-md q-gutter-md">
       <div
-        v-if="listItemStore.itemsList?.length === 0 && listItemStore.itemsListDone?.length === 0"
+        v-if="listItemStore?.itemsList?.length === 0 && listItemStore?.itemsListDone?.length === 0"
       >
         <q-img src="~/assets/fundo_vazio.png">
           <div class="absolute-bottom text-primary bg-transparent"></div>
@@ -52,7 +52,7 @@
       />
 
       <CardTotalComponent
-        v-if="listItemStore.itemsList.length > 0 || listItemStore.itemsListDone.length > 0"
+        v-if="listItemStore?.itemsList?.length > 0 || listItemStore?.itemsListDone?.length > 0"
         :quantity="quantityItems()"
         :total="calculateTotal()"
       />
@@ -74,14 +74,14 @@ import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useQuasar } from 'quasar';
 import { inject, onMounted, reactive, ref } from 'vue';
 import type { ListItem } from './models';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useListaStore } from 'src/stores/listaStore';
 import CardItemsComponent from './CardItemsComponent.vue';
 import CardTotalComponent from './CardTotalComponent.vue';
-// import CardInfoComponent from './CardInfoComponent.vue';
 
 const $q = useQuasar();
 const route = useRoute();
+const router = useRouter();
 const listStore = useListaStore();
 const listItemStore = useListaItemStore();
 
@@ -148,8 +148,9 @@ const deleteItem = async (key: string) => {
 onMounted(async () => {
   $q.loading.show();
   const list = await listStore.getList(route?.params?.id as string);
+  if (!list) await router.push({ name: 'Home' });
   await listItemStore.get(route?.params?.id as string);
-  if (list.description) titlePage.value = list.description;
+  if (list) titlePage.value = list?.description;
   $q.loading.hide();
 });
 </script>

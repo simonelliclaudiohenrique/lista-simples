@@ -144,10 +144,9 @@ const formItem = reactive<ListItem>({
 onMounted(async () => {
   $q.loading.show();
   await listStore.carregarListas();
-  if (listStore.lists.length > 0) {
+  if (listStore?.lists?.length > 0) {
     await router.push({ name: 'Lists' });
   }
-  titlePage.value = route.meta.title;
   $q.loading.hide();
 });
 

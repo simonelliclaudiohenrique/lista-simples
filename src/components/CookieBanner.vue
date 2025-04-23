@@ -1,14 +1,12 @@
 <template>
-  <q-page-stick>
-    <q-banner v-if="!accepted" class="bg-primary fixed-bottom q-pa-md" dense inline-actions>
-      Este site usa cookies para melhorar sua experiência. Ao continuar, você aceita nossa política
-      de cookies.
+  <q-banner v-if="!accepted" class="bg-primary fixed-bottom q-pa-md" dense inline-actions>
+    Este site usa cookies para melhorar sua experiência. Ao continuar, você aceita nossa política de
+    cookies.
 
-      <template v-slot:action>
-        <q-btn flat label="Aceitar" color="" @click="acceptCookies" />
-      </template>
-    </q-banner>
-  </q-page-stick>
+    <template v-slot:action>
+      <q-btn flat label="Aceitar" color="" @click="acceptCookies" />
+    </template>
+  </q-banner>
 </template>
 
 <script setup lang="ts">
