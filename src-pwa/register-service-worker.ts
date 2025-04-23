@@ -36,9 +36,15 @@ register(process.env.SERVICE_WORKER_FILE, {
       icon: 'cloud_downloa',
       closeBtn: 'Atualizar',
       timeout: 10000,
-      onDismiss() {
-        window.location.reload();
-      },
+      actions: [
+        {
+          label: 'Atualizar',
+          color: 'white',
+          handler: () => {
+            window.location.reload();
+          },
+        },
+      ],
     });
   },
 
