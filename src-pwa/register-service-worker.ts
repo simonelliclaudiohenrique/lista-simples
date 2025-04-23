@@ -39,7 +39,8 @@ register(process.env.SERVICE_WORKER_FILE, {
       actions: [
         {
           label: 'Atualizar',
-          color: 'white',
+          color: 'positive',
+          textColor: 'dark',
           handler: () => {
             window.location.reload();
           },
