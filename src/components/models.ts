@@ -29,5 +29,6 @@ export interface MenuList {
   icon: string;
   iconColor?: string;
   label: string;
+  to: string;
   separator: boolean;
 }

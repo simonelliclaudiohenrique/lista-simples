@@ -76,6 +76,7 @@
         icon="add"
         @click="showModal = true"
       />
+      <CookieBanner />
     </q-footer>
   </q-layout>
 </template>
@@ -90,6 +91,7 @@ import { useListaStore } from 'src/stores/listaStore';
 import { onMounted, provide, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import DrawerComponent from 'src/components/DrawerComponent.vue';
+import CookieBanner from 'src/components/CookieBanner.vue';
 
 const $q = useQuasar();
 const route = useRoute();
@@ -105,12 +107,26 @@ const menuList: MenuList[] = [
   {
     icon: 'draw',
     label: 'Lista Simples App',
+    to: '/',
     separator: true,
   },
   {
     icon: 'edit_note',
     label: 'Lista de compras',
-    separator: true,
+    to: '/lists',
+    separator: false,
+  },
+  {
+    icon: 'description',
+    label: 'Termos de uso',
+    to: '/termos-de-uso',
+    separator: false,
+  },
+  {
+    icon: 'policy',
+    label: 'Politicas de privacidade',
+    to: '/politicas-de-privacidade',
+    separator: false,
   },
 ];
 

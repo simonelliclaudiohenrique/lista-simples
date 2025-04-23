@@ -10,7 +10,7 @@
     <q-scroll-area class="fit">
       <q-list>
         <template v-for="(menuItem, index) in menuList" :key="index">
-          <q-item clickable to="/lists">
+          <q-item clickable :to="menuItem.to">
             <q-item-section avatar>
               <q-icon :name="menuItem.icon" />
             </q-item-section>
