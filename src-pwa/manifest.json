@@ -1,7 +1,10 @@
 {
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#027be3",
+  "theme_color": "#7D6DEC",
+  "name": "Lista simples",
+  "short_name": "lista-compra",
+  "description": "Uma lista de supermercado simples e intuitiva com calculo do valor dos itens para não haver surpresas no caixa",
   "icons": [
     {
       "src": "icons/icon-128x128.png",
@@ -28,5 +31,26 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide"
+    },
+    {
+      "src": "screenshots/minhas-listas.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide"
+    },
+    {
+      "src": "screenshots/items.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide"
+    }
+  ],
+  "categories": ["lifestyle", "shopping", "utilities"]
 }
