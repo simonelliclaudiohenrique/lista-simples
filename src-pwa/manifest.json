@@ -1,9 +1,11 @@
 {
+  "start_url": "/?v=2",
+  "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#7D6DEC",
   "name": "Lista simples",
-  "short_name": "lista-compra",
+  "short_name": "lista-simples",
   "description": "Uma lista de supermercado simples e intuitiva com calculo do valor dos itens para não haver surpresas no caixa",
   "icons": [
     {
