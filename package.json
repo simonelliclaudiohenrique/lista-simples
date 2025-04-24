@@ -2,7 +2,7 @@
   "name": "lista-compra",
   "version": "0.0.1",
   "description": "Uma lista de supermercado simples e intuitiva com calculo do valor dos itens para não haver surpresas no caixa",
-  "productName": "Quasar App",
+  "productName": "Lista Simples",
   "author": "Claudio Henrique <simonelliclaudiohenrique@gmail.com>",
   "type": "module",
   "private": true,
