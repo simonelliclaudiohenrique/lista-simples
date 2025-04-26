@@ -3,7 +3,7 @@
     <q-card style="margin: 0; padding: 0" flat class="col-12">
       <q-card-section>
         <div class="text-subtitle1">
-          Preencha os campos e clique em <strong>confimar</strong> para adicinar um item e
+          Preencha os campos e clique em <strong>confimar</strong> para adicionar um item e
           <strong>cancelar</strong>
           para voltar a lista de itens
         </div>
