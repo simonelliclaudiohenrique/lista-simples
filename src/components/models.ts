@@ -12,6 +12,7 @@ export interface ListItem {
     listKey: string;
     content: string;
     quantity: number;
+    unit: string;
     price: number;
     done: boolean;
   };
@@ -21,6 +22,7 @@ export interface ListItemData {
   listKey: string;
   content: string;
   quantity: number;
+  unit: string;
   price?: number;
   done?: boolean;
 }

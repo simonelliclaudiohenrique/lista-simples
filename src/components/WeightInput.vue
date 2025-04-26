@@ -47,8 +47,8 @@ const { modelValue } = toRefs(props);
 const formatted = computed(() => {
   const value = modelValue.value ?? 0;
   return value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
+    style: 'decimal',
+    minimumFractionDigits: 3,
   });
 });
 
@@ -56,7 +56,7 @@ const formatted = computed(() => {
 function onInput(val: string | number | null) {
   const str = String(val ?? '');
   const clean = str.replace(/[^\d]/g, '');
-  const number = parseFloat(clean) / 100 || 0;
+  const number = parseFloat(clean) / 1000 || 0;
   emit('update:modelValue', number);
 }
 

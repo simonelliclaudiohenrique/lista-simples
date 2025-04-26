@@ -44,10 +44,21 @@
           autofocus
           @keyup.enter="criarItem"
         />
+        <q-select filled v-model="unitItem" :options="optionsUnit" label="Unidade" />
+        <WeightInput
+          v-if="unitItem === 'KG'"
+          v-model="formItem.data.quantity"
+          filled
+          label="Quantidade"
+          @keyup.enter="criarItem"
+        />
         <q-input
+          v-else
           filled
           dense
+          :disable="!unitItem"
           v-model="formItem.data.quantity"
+          type="number"
           label="Quantidade"
           autofocus
           @keyup.enter="criarItem"
@@ -92,6 +103,7 @@ import { onMounted, provide, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import DrawerComponent from 'src/components/DrawerComponent.vue';
 import CookieBanner from 'src/components/CookieBanner.vue';
+import WeightInput from 'src/components/WeightInput.vue';
 
 const $q = useQuasar();
 const route = useRoute();
@@ -102,6 +114,9 @@ const showModal = ref(false);
 const listDescription = ref('');
 const titlePage = ref();
 const drawer = ref(false);
+
+const unitItem = ref('UND');
+const optionsUnit = ['UND', 'KG'];
 
 const menuList: MenuList[] = [
   {
@@ -135,8 +150,9 @@ const formItem = reactive<ListItem>({
   data: {
     content: '',
     listKey: '',
+    unit: '',
     price: 0,
-    quantity: 1,
+    quantity: 0,
     done: false,
   },
 });
@@ -173,10 +189,11 @@ const criarItem = async () => {
     return;
   }
   formItem.data.listKey = route?.params?.id as string;
+  formItem.data.unit = unitItem.value;
   await itemsList.create(formItem.data);
   $q.loading.hide();
   formItem.data.content = '';
-  formItem.data.quantity = 1;
+  formItem.data.quantity = 0;
   formItem.data.price = 0;
   await itemsList.get(formItem.data.listKey);
 };

@@ -16,7 +16,16 @@
           autofocus
           @keyup.enter="updateItem"
         />
+        <q-select filled v-model="unitItem" :options="optionsUnit" label="Unidade" />
+        <WeightInput
+          v-if="unitItem === 'KG'"
+          v-model="formItem.quantity"
+          filled
+          label="Quantidade"
+          @keyup.enter="updateItem"
+        />
         <q-input
+          v-else
           filled
           dense
           type="number"
@@ -78,12 +87,15 @@ import { useRoute, useRouter } from 'vue-router';
 import { useListaStore } from 'src/stores/listaStore';
 import CardItemsComponent from './CardItemsComponent.vue';
 import CardTotalComponent from './CardTotalComponent.vue';
+import WeightInput from './WeightInput.vue';
 
 const $q = useQuasar();
 const route = useRoute();
 const router = useRouter();
 const listStore = useListaStore();
 const listItemStore = useListaItemStore();
+const unitItem = ref();
+const optionsUnit = ['UND', 'KG'];
 
 const titlePage = ref(inject('titlePage'));
 
@@ -95,6 +107,7 @@ const formItem = reactive({
   listKey: '',
   price: 0,
   quantity: 0,
+  unit: '',
   done: false,
 });
 
@@ -107,19 +120,19 @@ const calculateTotal = () => {
 };
 
 const quantityItems = () => {
-  const result = listItemStore.itemsListDone
-    .filter((item) => item.data.done)
-    .reduce((acc, item) => acc + +item.data.quantity, 0);
+  const result = listItemStore.itemsListDone.filter((item) => item.data.done).length;
   return result;
 };
 
 const openModal = (item: ListItem) => {
+  unitItem.value = item.data.unit || null;
   itemKey.value = item.key;
   formItem.content = item.data.content;
   formItem.listKey = item.data.listKey;
   formItem.quantity = item.data.quantity;
   formItem.price = item.data.price;
   formItem.done = item.data.done;
+  formItem.unit = item.data.unit;
   showModal.value = true;
 };
 

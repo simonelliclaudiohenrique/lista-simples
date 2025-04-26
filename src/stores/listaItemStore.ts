@@ -16,6 +16,7 @@ export const useListaItemStore = defineStore('itemsList', () => {
       quantity: data.quantity,
       price: data.price,
       done: data.done,
+      unit: data.unit,
     });
   };
 
