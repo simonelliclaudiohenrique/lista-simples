@@ -43,10 +43,6 @@ register(process.env.SERVICE_WORKER_FILE, {
             window.location.reload();
           },
         },
-        {
-          label: 'Fechar',
-          color: 'white',
-        },
       ],
       textColor: 'white', // cor do texto principal da notificação
     });
