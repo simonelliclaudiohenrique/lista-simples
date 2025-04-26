@@ -13,12 +13,24 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
+import { useListaStore } from 'src/stores/listaStore';
 import { inject, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
+const router = useRouter();
+const $q = useQuasar();
+const listStore = useListaStore();
 
 const titlePage = ref(inject('titlePage'));
-onMounted(() => {
+onMounted(() => {});
+onMounted(async () => {
+  $q.loading.show();
+  await listStore.carregarListas();
+  if (listStore?.lists?.length > 0) {
+    await router.push({ name: 'Lists' });
+  }
   titlePage.value = route.meta.title;
+  $q.loading.hide();
 });
 </script>

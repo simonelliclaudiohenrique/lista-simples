@@ -1,44 +1,27 @@
 <template>
   <div class="">
-    <ModalComponent v-if="showModal" v-model="showModal">
-      <template #title> Atualizar lista </template>
-
-      <template #actions>
-        <q-btn flat label="confirmar" @click="updateItem" />
-      </template>
-
-      <div class="q-pa-md q-gutter-md">
-        <q-input
-          filled
-          dense
-          v-model="formItem.content"
-          label="Descrição"
-          autofocus
-          @keyup.enter="updateItem"
-        />
-        <q-select filled v-model="unitItem" :options="optionsUnit" label="Unidade" />
-        <WeightInput
-          v-if="unitItem === 'KG'"
-          v-model="formItem.quantity"
-          filled
-          label="Quantidade"
-          @keyup.enter="updateItem"
-        />
-        <q-input
-          v-else
-          filled
-          dense
-          type="number"
-          v-model="formItem.quantity"
-          label="Quantidade"
-          autofocus
-          @keyup.enter="updateItem"
-        />
-        <CurrencyInput filled v-model="formItem.price" label="Preço" @keyup.enter="updateItem" />
-      </div>
+    <div class="row q-pa-md" v-if="($q.screen.xs || $q.screen.sm) && showModal">
+      <FormularioItemComponent
+        ref="form"
+        class="col-12"
+        :item="itemForm"
+        :item-key="itemKey"
+        @update-modal="((showModal = false), (itemKey = ''))"
+      />
+    </div>
+    <ModalComponent
+      v-if="!$q.screen.xs && !$q.screen.sm && showModal"
+      v-model="showModal as boolean"
+    >
+      <FormularioItemComponent
+        ref="form"
+        :item="itemForm"
+        :item-key="itemKey"
+        @update-modal="((showModal = false), (itemKey = ''))"
+      />
     </ModalComponent>
 
-    <div class="q-pa-md q-gutter-md">
+    <div v-if="!showModal" class="q-pa-md q-gutter-md">
       <div
         v-if="listItemStore?.itemsList?.length === 0 && listItemStore?.itemsListDone?.length === 0"
       >
@@ -77,17 +60,16 @@
 </template>
 
 <script setup lang="ts">
-import CurrencyInput from './CurrencyInput.vue';
 import ModalComponent from './ModalComponent.vue';
 import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useQuasar } from 'quasar';
-import { inject, onMounted, reactive, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import type { ListItem } from './models';
 import { useRoute, useRouter } from 'vue-router';
 import { useListaStore } from 'src/stores/listaStore';
 import CardItemsComponent from './CardItemsComponent.vue';
 import CardTotalComponent from './CardTotalComponent.vue';
-import WeightInput from './WeightInput.vue';
+import FormularioItemComponent from './FormularioItemComponent.vue';
 
 const $q = useQuasar();
 const route = useRoute();
@@ -95,21 +77,13 @@ const router = useRouter();
 const listStore = useListaStore();
 const listItemStore = useListaItemStore();
 const unitItem = ref();
-const optionsUnit = ['UND', 'KG'];
+const itemKey = ref('');
+const itemForm = ref();
+const form = ref();
 
 const titlePage = ref(inject('titlePage'));
 
-const showModal = ref(false);
-const itemKey = ref('');
-
-const formItem = reactive({
-  content: '',
-  listKey: '',
-  price: 0,
-  quantity: 0,
-  unit: '',
-  done: false,
-});
+const showModal = ref(inject('showModal'));
 
 const calculateTotal = () => {
   const result = listItemStore.itemsListDone
@@ -127,33 +101,19 @@ const quantityItems = () => {
 const openModal = (item: ListItem) => {
   unitItem.value = item.data.unit || null;
   itemKey.value = item.key;
-  formItem.content = item.data.content;
-  formItem.listKey = item.data.listKey;
-  formItem.quantity = item.data.quantity;
-  formItem.price = item.data.price;
-  formItem.done = item.data.done;
-  formItem.unit = item.data.unit;
+  itemForm.value = item.data;
   showModal.value = true;
-};
-
-const updateItem = async () => {
-  $q.loading.show();
-  await listItemStore.update(itemKey.value, formItem);
-  await listItemStore.get(route?.params?.id as string);
-  showModal.value = false;
-  $q.loading.hide();
-};
-
-const checkItem = async (key: string, done: boolean) => {
-  $q.loading.show();
-  await listItemStore.toggleDone(key, done);
-  await listItemStore.get(route?.params?.id as string);
-  $q.loading.hide();
 };
 
 const deleteItem = async (key: string) => {
   $q.loading.show();
   await listItemStore.remove(key);
+  await listItemStore.get(route?.params?.id as string);
+  $q.loading.hide();
+};
+const checkItem = async (key: string, done: boolean) => {
+  $q.loading.show();
+  await listItemStore.toggleDone(key, done);
   await listItemStore.get(route?.params?.id as string);
   $q.loading.hide();
 };

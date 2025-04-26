@@ -1,23 +1,24 @@
 <template>
   <div class="">
-    <ModalComponent v-model="showModal">
-      <template #title> Atualizar lista </template>
-
-      <template #actions>
-        <q-btn flat label="confirmar" @click="alterList" />
-      </template>
-
-      <q-input
-        filled
-        label="Descrição"
-        dense
-        v-model="listDescription"
-        autofocus
-        @keyup.enter="alterList"
+    <div class="row q-pa-md" v-if="($q.screen.xs || $q.screen.sm) && showModal">
+      <FormularioListaComponent
+        :item="listForm"
+        :list-key="listKey"
+        @update-modal="((showModal = false), (listKey = ''))"
+      />
+    </div>
+    <ModalComponent
+      v-if="!$q.screen.xs && !$q.screen.sm && showModal"
+      v-model="showModal as boolean"
+    >
+      <FormularioListaComponent
+        :item="listForm"
+        :list-key="listKey"
+        @update-modal="((showModal = false), (listKey = ''))"
       />
     </ModalComponent>
 
-    <div class="q-pa-md q-gutter-md">
+    <div v-if="!showModal" class="q-pa-md q-gutter-md">
       <CardListComponent
         :lists="listStore?.lists || []"
         :list-items="listItemStore.itemsList"
@@ -38,17 +39,18 @@ import type { List } from './models';
 import { useListaItemStore } from 'src/stores/listaItemStore';
 import { useRoute, useRouter } from 'vue-router';
 import CardListComponent from './CardListComponent.vue';
+import FormularioListaComponent from './FormularioListaComponent.vue';
 
 const $q = useQuasar();
 const listStore = useListaStore();
 const listItemStore = useListaItemStore();
 const router = useRouter();
 const route = useRoute();
+const listForm = ref();
 
 const titlePage = ref(inject('titlePage'));
 
-const showModal = ref(false);
-const listDescription = ref<string>('');
+const showModal = ref(inject('showModal'));
 const listKey = ref<string>('');
 
 onMounted(async () => {
@@ -57,7 +59,7 @@ onMounted(async () => {
   await listItemStore.getAll();
   titlePage.value = route.meta.title;
   $q.loading.hide();
-  if (!listStore?.lists?.length) await router.push({ name: 'Home' });
+  if (!listStore?.lists?.length && !showModal.value) await router.push({ name: 'Home' });
 });
 
 const toItemsList = async (key: string) => {
@@ -66,16 +68,8 @@ const toItemsList = async (key: string) => {
 
 const openModal = (list: List) => {
   listKey.value = list.key;
-  listDescription.value = list?.data?.description;
+  listForm.value = list?.data;
   showModal.value = true;
-};
-const alterList = async () => {
-  $q.loading.show();
-  await listStore.updateList(listKey.value, listDescription.value);
-  await listStore.carregarListas();
-  showModal.value = false;
-  listDescription.value = '';
-  $q.loading.hide();
 };
 
 const deleteList = async (key: string) => {

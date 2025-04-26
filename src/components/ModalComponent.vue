@@ -10,11 +10,6 @@
       <q-card-section class="q-pt-none">
         <slot />
       </q-card-section>
-
-      <q-card-actions align="right" class="text-primary">
-        <q-btn flat label="Cancelar" v-close-popup />
-        <slot name="actions" />
-      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
