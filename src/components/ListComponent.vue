@@ -1,21 +1,13 @@
 <template>
   <div class="">
     <div class="row q-pa-md" v-if="($q.screen.xs || $q.screen.sm) && showModal">
-      <FormularioListaComponent
-        :item="listForm"
-        :list-key="listKey"
-        @update-modal="((showModal = false), (listKey = ''))"
-      />
+      <FormularioListaComponent :item="listForm" :list-key="listKey" @update-modal="cancel" />
     </div>
     <ModalComponent
       v-if="!$q.screen.xs && !$q.screen.sm && showModal"
       v-model="showModal as boolean"
     >
-      <FormularioListaComponent
-        :item="listForm"
-        :list-key="listKey"
-        @update-modal="((showModal = false), (listKey = ''))"
-      />
+      <FormularioListaComponent :item="listForm" :list-key="listKey" @update-modal="cancel" />
     </ModalComponent>
 
     <div v-if="!showModal" class="q-pa-md q-gutter-md">
@@ -77,6 +69,12 @@ const deleteList = async (key: string) => {
   await listStore.removeList(key);
   await listStore.carregarListas();
   $q.loading.hide();
+  if (!listStore?.lists?.length) await router.push({ name: 'Home' });
+};
+
+const cancel = async () => {
+  showModal.value = false;
+  listKey.value = '';
   if (!listStore?.lists?.length) await router.push({ name: 'Home' });
 };
 </script>
